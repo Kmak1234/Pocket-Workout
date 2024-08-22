@@ -4,10 +4,41 @@ const WorkoutForm = () => {
     const [title, setTitle] = useState('')
     const [load, setLoad] = useState('')
     const [reps, setReps] = useState('')
+    const [err, setErr] = useState(null)
 
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+
+        const workout = {
+            title,
+            load,
+            reps
+        }
+
+        const response = await fetch('api/workouts' , {
+            method: 'POST',
+            body: JSON.stringify(workout),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        const json = await response.json()
+
+        if(!response.ok) {
+            setErr(json.error)
+        }
+
+        if (response.ok) {
+            setTitle('')
+            setLoad('')
+            setReps('')
+            setErr(null)
+            console.log('new workout added', json)
+        }
+    }
     
     return(
-        <form className="create">
+        <form className="create" onSubmit={handleSubmit}>
             <h3>Add a New Workout</h3>
 
             
@@ -16,8 +47,8 @@ const WorkoutForm = () => {
                 type="text"
                 onChange={(e) => {
                     setTitle(e.target.value)
-                    value = {title}
                 }}
+                value = {title}
             />
 
             <label>Load (in kg)</label>
@@ -25,8 +56,8 @@ const WorkoutForm = () => {
                 type="number"
                 onChange={(e) => {
                     setLoad(e.target.value)
-                    value = {load}
                 }}
+                value={load}
             />
 
             <label>Reps: </label>
@@ -34,11 +65,15 @@ const WorkoutForm = () => {
                 type="number"
                 onChange={(e) => {
                     setReps(e.target.value)
-                    value = {reps}
                 }}
+                value = {reps}
             />
 
             <button>Add Workout</button>
+
+            {err && <div className="error">{err}</div>}
         </form>
     )
 }
+
+export default WorkoutForm
