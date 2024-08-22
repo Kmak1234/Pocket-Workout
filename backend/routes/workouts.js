@@ -10,7 +10,7 @@ router.get('/', getAllWorkouts)
 //get a single workout
 router.get('/:id', getWorkout)
 
-//post a new workout
+//post a new workoutt
 router.post('/', createWorkout)
 
 //delete a workout
