@@ -20,7 +20,7 @@ const Home = () => {
         }
 
         fetchWorkots()
-    }, [])
+    }, [dispatch])
 
 
     return (
